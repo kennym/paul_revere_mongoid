@@ -8,9 +8,7 @@ require "mongoid"
 require "mongoid-rspec"
 require "database_cleaner"
 require "rspec/rails"
-
-# Pull in the fake rails app
-require 'fake_app'
+require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -21,7 +19,7 @@ RSpec.configure do |config|
   require 'rspec/expectations'
   config.include Mongoid::Matchers
 
-  Mongoid.load!(File.expand_path("../mongoid.yml", __FILE__))
+  Mongoid.load!(File.expand_path("../dummy/config/mongoid.yml", __FILE__))
 
   # == Mock Framework
   config.mock_with :mocha
