@@ -20,8 +20,41 @@ describe Announcement do
     Announcement.current.exists?.should be_false
   end
 
-  it 'can always assign straight to the body' do
+  it "can always assign straight to the body" do
     Announcement.create!(:body => 'hello').body.should == 'hello'
+  end
+
+  it "should return the announcement if not already seen by user" do
+    user = User.create!
+
+    announcement = Announcement.create!(:body => 'hello')
+    Announcement.current_for_user(user).exists?.should be_true
+  end
+
+  it "should not return the announcement if already seen by user" do
+    user = User.create!
+
+    announcement = Announcement.create!(:body => 'hello')
+    announcement.already_seen_by << user
+    announcement.save!
+
+    Announcement.current_for_user(user).should be_nil
+  end
+
+  context "if already seen by user and there are more than one announcements unseen" do
+    before { @user = User.create! }
+
+    it "should return the latest unseen announcement" do
+
+      a = Announcement.create!(:body => 'hello')
+
+      announcement = Announcement.create!(:body => 'hello')
+      announcement.already_seen_by << @user
+      announcement.save!
+
+      Announcement.current_for_user(@user).exists?.should be_true
+      Announcement.current_for_user(@user).should == a
+    end
   end
 
   def create_announcement(attributes)
