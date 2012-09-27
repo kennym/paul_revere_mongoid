@@ -5,7 +5,7 @@ class Announcement
   field :body
 
   def self.current
-    first(sort: [[ :created_at, :desc ]]) || new
+    desc(:created_at).first || new
   end
 
   def exists?

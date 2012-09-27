@@ -1,3 +1,6 @@
 test:
-  host: localhost
-  database: paul_revere_test
+  sessions:
+    default:
+      hosts:
+        - localhost:27017
+      database: paul_revere_test
